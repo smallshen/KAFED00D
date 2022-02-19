@@ -70,8 +70,10 @@ class AttributeReader(
             val read = stream.index
             if (read != expectedContentLength) {
                 val name = (builder.pool[nameIndex] as CpUtf8).text
-                logger.debug("Invalid '{}' on {}, claimed to be {} bytes, but was {}",
-                    name, context.name, expectedContentLength, read)
+                logger.debug(
+                    "Invalid '{}' on {}, claimed to be {} bytes, but was {}",
+                    name, context.name, expectedContentLength, read
+                )
                 return null
             }
             attribute
@@ -79,8 +81,10 @@ class AttributeReader(
             if (reader.dropEofAttributes) {
                 if (nameIndex < builder.pool.size) {
                     val name = (builder.pool[nameIndex] as CpUtf8).text
-                    logger.debug("Invalid '{}' on {}, EOF thrown when parsing attribute, expected {} bytes",
-                        name, context.name, expectedContentLength)
+                    logger.debug(
+                        "Invalid '{}' on {}, EOF thrown when parsing attribute, expected {} bytes",
+                        name, context.name, expectedContentLength
+                    )
                 } else {
                     logger.debug("Invalid attribute on {}, invalid attribute name index", context.name)
                 }
@@ -97,8 +101,10 @@ class AttributeReader(
         if (reader.dropForwardVersioned) {
             val introducedAt = getIntroducedVersion(name)
             if (introducedAt > builder.versionMajor) {
-                logger.debug("Found '{}' on {} in class version {}, min supported is {}",
-                    name, context.name, builder.versionMajor, introducedAt)
+                logger.debug(
+                    "Found '{}' on {} in class version {}, min supported is {}",
+                    name, context.name, builder.versionMajor, introducedAt
+                )
                 return null
             }
         }
@@ -113,11 +119,14 @@ class AttributeReader(
             NEST_MEMBERS -> return readNestMembers()
             SOURCE_DEBUG_EXTENSION -> return readSourceDebugExtension()
             RUNTIME_INVISIBLE_ANNOTATIONS, RUNTIME_VISIBLE_ANNOTATIONS -> return readAnnotations(
-                context)
+                context
+            )
             RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS, RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS -> return readParameterAnnotations(
-                context)
+                context
+            )
             RUNTIME_INVISIBLE_TYPE_ANNOTATIONS, RUNTIME_VISIBLE_TYPE_ANNOTATIONS -> return readTypeAnnotations(
-                context)
+                context
+            )
             ANNOTATION_DEFAULT -> return readAnnotationDefault(context)
             SYNTHETIC -> return readSynthetic()
             BOOTSTRAP_METHODS -> return readBoostrapMethods()
@@ -163,7 +172,8 @@ class AttributeReader(
             for (x in 0 until numAttributes) {
                 val attr = AttributeReader(
                     reader,
-                    builder, stream).readAttribute(AttributeContext.ATTRIBUTE)
+                    builder, stream
+                ).readAttribute(AttributeContext.ATTRIBUTE)
                 if (attr != null) attributes.add(attr)
             }
             components.add(RecordAttribute.RecordComponent(nameIndex, descIndex, attributes))
@@ -307,8 +317,10 @@ class AttributeReader(
             }
             provides.add(ModuleAttribute.Provides(prvIndex, indices))
         }
-        return ModuleAttribute(nameIndex, moduleIndex, flags, versionIndex,
-            requires, exports, opens, uses, provides)
+        return ModuleAttribute(
+            nameIndex, moduleIndex, flags, versionIndex,
+            requires, exports, opens, uses, provides
+        )
     }
 
     /**
@@ -379,8 +391,12 @@ class AttributeReader(
             val outerClassInfoIndex = stream.readUnsignedShort()
             val innerNameIndex = stream.readUnsignedShort()
             val innerClassAccessFlags = stream.readUnsignedShort()
-            innerClasses.add(InnerClassesAttribute.InnerClass(innerClassInfoIndex, outerClassInfoIndex,
-                innerNameIndex, innerClassAccessFlags))
+            innerClasses.add(
+                InnerClassesAttribute.InnerClass(
+                    innerClassInfoIndex, outerClassInfoIndex,
+                    innerNameIndex, innerClassAccessFlags
+                )
+            )
         }
         return InnerClassesAttribute(nameIndex, innerClasses)
     }
@@ -535,10 +551,9 @@ class AttributeReader(
      */
     @Throws(IOException::class)
     private fun readCode(): CodeAttribute {
-        var maxStack = -1
-        var maxLocals = -1
-        var codeLength = -1
-        var code: ByteArray? = null
+        val maxStack: Int
+        val maxLocals: Int
+        val codeLength: Int
         val exceptions: MutableList<ExceptionTableEntry> = ArrayList()
         val attributes: MutableList<Attribute> = ArrayList()
         // Parse depending on class format version
@@ -554,7 +569,7 @@ class AttributeReader(
             codeLength = stream.readInt()
         }
         // Read instructions
-        code = ByteArray(codeLength)
+        val code = ByteArray(codeLength)
         stream.readFully(code)
         // Read exceptions
         val numExceptions = stream.readUnsignedShort()
@@ -612,33 +627,15 @@ class AttributeReader(
                 // The offset_delta is frame_type - 64
                 // verification_type_info stack
                 val stack = readVerificationTypeInfo()
-                frames.add(SameLocalsOneStackItem(
-                    frameType - 64,
-                    stack
-                ))
-            } else // full_frame
-            // u2: offset_delta
-            // verification_type_info locals[u2 number_of_locals]
-            // verification_type_info stack[u2 number_of_stack_items]
-// append_frame
-            // u2: offset_delta
-            // verification_type_info locals[frame_type - 251]
-// same_frame_extended
-            // u2: offset_delta
-// chop_frame
-            // This frame type indicates that the frame has the same local
-            // variables as the previous frame except that the last k local
-            // variables are absent, and that the operand stack is empty. The
-            // value of k is given by the formula 251 - frame_type.
-            // u2: offset_delta
-// same_locals_1_stack_item_frame_extended
-            // u2: offset_delta
-            // verification_type_info stack
-                require(frameType >= SAME_LOCALS_ONE_STACK_ITEM_EXTENDED_MIN) {
-                    // Tags in the range [128-246] are reserved for future use.
-                    "Unknown stackframe tag $frameType"
-                }
-            if (frameType <= SAME_LOCALS_ONE_STACK_ITEM_EXTENDED_MAX) {
+                frames.add(
+                    SameLocalsOneStackItem(
+                        frameType - 64,
+                        stack
+                    )
+                )
+            } else if (frameType < SAME_LOCALS_ONE_STACK_ITEM_EXTENDED_MIN) {
+                throw IllegalStateException("Unknown stackframe tag $frameType")
+            } else if (frameType <= SAME_LOCALS_ONE_STACK_ITEM_EXTENDED_MAX) {
                 // same_locals_1_stack_item_frame_extended
                 // u2: offset_delta
                 val offsetDelta = stream.readUnsignedShort()
@@ -664,9 +661,11 @@ class AttributeReader(
                 // same_frame_extended
                 // u2: offset_delta
                 val offsetDelta = stream.readUnsignedShort()
-                frames.add(SameFrameExtended(
-                    offsetDelta
-                ))
+                frames.add(
+                    SameFrameExtended(
+                        offsetDelta
+                    )
+                )
             } else if (frameType <= APPEND_FRAME_MAX) {
                 // append_frame
                 // u2: offset_delta
@@ -677,9 +676,11 @@ class AttributeReader(
                 for (j in 0 until numLocals) {
                     locals.add(readVerificationTypeInfo())
                 }
-                frames.add(AppendFrame(
-                    offsetDelta, locals
-                ))
+                frames.add(
+                    AppendFrame(
+                        offsetDelta, locals
+                    )
+                )
             } else if (frameType <= FULL_FRAME_MAX) {
                 // full_frame
                 // u2: offset_delta
@@ -696,9 +697,11 @@ class AttributeReader(
                 repeat(numStackItems) {
                     stack.add(readVerificationTypeInfo())
                 }
-                frames.add(FullFrame(
-                    offsetDelta, locals, stack
-                ))
+                frames.add(
+                    FullFrame(
+                        offsetDelta, locals, stack
+                    )
+                )
             } else {
                 throw IllegalArgumentException("Unknown frame type $frameType")
             }

@@ -28,7 +28,7 @@ fun main() {
 
 //    InstructionReader.read(classFile.methods.first().attributes.filterIsInstance<CodeAttribute>().first())
 
-    File("run/classes/Test2.class").writeBytes(newBytes)
+    File("run/out/Test.class").writeBytes(newBytes)
     println(bytes.contentEquals(newBytes))
     println(bytes.size - newBytes.size)
 }
