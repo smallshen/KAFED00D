@@ -2,6 +2,7 @@ import me.coley.cafedude.classfile.attribute.CodeAttribute
 import me.coley.cafedude.io.ClassFileReader
 import me.coley.cafedude.io.ClassFileWriter
 import me.coley.cafedude.io.InstructionReader
+import me.coley.cafedude.io.InstructionWriter
 import java.io.File
 
 // TODO: unit test
@@ -17,8 +18,9 @@ fun main() {
         m.attributes.forEach {
             println(it)
             if (it is CodeAttribute) {
-                val size = InstructionReader.read(it).sumOf { insn -> insn.size }
-                println(size)
+                val instrunctions = InstructionReader.read(it)
+                val new = InstructionWriter.write(instrunctions)
+                println(new.size)
                 println(it.code.size)
             }
         }

@@ -70,7 +70,7 @@ object InstructionReader {
 
                     JSR -> IntOperandInstruction(JSR, buffer.short.toInt())
                     GOTO -> IntOperandInstruction(GOTO, buffer.short.toInt())
-                    SIPUSH -> IntOperandInstruction(opcode, buffer.short.toInt())
+                    SIPUSH -> IntOperandInstruction(SIPUSH, buffer.short.toInt())
                     IFNULL, IFNONNULL -> IntOperandInstruction(opcode, buffer.short.toInt())
                     IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT,
                     IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
@@ -97,16 +97,18 @@ object InstructionReader {
                     }
 
                     CHECKCAST, INSTANCEOF -> IntOperandInstruction(opcode, buffer.short and 0xff)
-                    IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> IntOperandInstruction(opcode, buffer.short.toInt())
-                    ISTORE, LSTORE, FSTORE, DSTORE, ASTORE -> IntOperandInstruction(opcode, buffer.get().toInt())
-                    ILOAD, LLOAD, FLOAD, DLOAD, ALOAD -> IntOperandInstruction(opcode, buffer.get() and 0xff)
-                    GETSTATIC, PUTSTATIC, GETFIELD, PUTFIELD -> IntOperandInstruction(opcode, buffer.short and 0xff)
-
 
                     INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC, INVOKEINTERFACE -> IntOperandInstruction(
                         opcode,
                         buffer.short and 0xff
                     )
+                    GETSTATIC, PUTSTATIC, GETFIELD, PUTFIELD -> IntOperandInstruction(opcode, buffer.short and 0xff)
+
+                    IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> IntOperandInstruction(opcode, buffer.short.toInt())
+                    ISTORE, LSTORE, FSTORE, DSTORE, ASTORE -> IntOperandInstruction(opcode, buffer.get().toInt())
+                    ILOAD, LLOAD, FLOAD, DLOAD, ALOAD -> IntOperandInstruction(opcode, buffer.get() and 0xff)
+
+
 
 
 

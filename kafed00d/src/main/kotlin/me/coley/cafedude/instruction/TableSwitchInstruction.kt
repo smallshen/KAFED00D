@@ -13,7 +13,7 @@ data class TableSwitchInstruction(
     var offsets: List<Int>,
 ) : Instruction(Opcodes.TABLESWITCH) {
     /**
-     * 4(Opcode + padding) + 4(low) + 4(high) + (offsets.size * 4(index))
+     * 4(Opcode + padding) + 4(default) + 4(low) + 4(high) + (offsets.size * 4(index))
      */
-    override val size: Int = 12 + (offsets.size * 4)
+    override val size: Int = 16 + (offsets.size * 4)
 }

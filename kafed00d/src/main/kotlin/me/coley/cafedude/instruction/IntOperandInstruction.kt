@@ -13,9 +13,22 @@ class IntOperandInstruction(opcode: Int, var operand: Int) : Instruction(opcode)
      */
     override val size: Int
         get() = 1 + when (opcode) {
-            SIPUSH, LDC_W, LDC2_W, IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE,
-            GOTO, JSR,
-            in IF_ICMPEQ..IF_ACMPNE -> 2
+
+            GOTO_W, JSR_W -> 4
+
+
+            JSR, GOTO, SIPUSH, IFNULL, IFNONNULL,
+            IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT,
+            IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
+            IF_ACMPEQ, IF_ACMPNE,
+            NEW, ANEWARRAY,
+            LDC_W, LDC2_W,
+            INVOKEDYNAMIC,
+            CHECKCAST, INSTANCEOF,
+            INVOKEVIRTUAL, INVOKESPECIAL,
+            INVOKESTATIC, INVOKEINTERFACE,
+            GETSTATIC, PUTSTATIC, GETFIELD, PUTFIELD,
+            IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> 2
 
             else -> 1
         }

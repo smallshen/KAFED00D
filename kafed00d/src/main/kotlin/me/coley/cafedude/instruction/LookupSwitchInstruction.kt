@@ -11,9 +11,9 @@ data class LookupSwitchInstruction(
     var offsets: List<Int>,
 ) : Instruction(Opcodes.LOOKUPSWITCH) {
     /**
-     * 4(Opcode + padding) + 4(count) + (offsets.size * (4(key) + 4(offset)))
+     * 4(Opcode + padding) + 4(count) + 4(default) + (offsets.size * (4(key) + 4(offset)))
      */
-    override val size: Int = 8 + (offsets.size * 8)
+    override val size: Int = 12 + (offsets.size * 8)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
