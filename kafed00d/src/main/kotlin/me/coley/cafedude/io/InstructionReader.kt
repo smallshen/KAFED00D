@@ -17,7 +17,7 @@ object InstructionReader {
      * @return a list of instructions.
      */
     fun read(attribute: CodeAttribute): List<Instruction> {
-        val instructions: MutableList<Instruction> = ArrayList()
+        val instructions: MutableList<Instruction> = mutableListOf()
         val buffer = ByteBuffer.wrap(attribute.code)
         while (buffer.hasRemaining()) {
             instructions.add(
@@ -65,27 +65,36 @@ object InstructionReader {
                     I2L, I2F, I2D, L2I, L2F, L2D, F2I, F2L, F2D, D2I, D2L, D2F, I2B, I2C, I2S -> BasicInstruction(opcode)
 
 
-                    JSR -> IntOperandInstruction(JSR, buffer.short.toInt())
-                    GOTO -> IntOperandInstruction(GOTO, buffer.short.toInt())
 
                     GOTO_W, JSR_W -> IntOperandInstruction(opcode, buffer.int)
-                    BIPUSH -> IntOperandInstruction(opcode, buffer.get().toInt())
+
+                    JSR -> IntOperandInstruction(JSR, buffer.short.toInt())
+                    GOTO -> IntOperandInstruction(GOTO, buffer.short.toInt())
                     SIPUSH -> IntOperandInstruction(opcode, buffer.short.toInt())
-
-                    NEW -> IntOperandInstruction(NEW, buffer.short and 0xff)
-                    RET -> IntOperandInstruction(RET, buffer.get() and 0xff)
-                    LDC -> IntOperandInstruction(LDC, buffer.get() and 0xff)
-
-
                     IFNULL, IFNONNULL -> IntOperandInstruction(opcode, buffer.short.toInt())
-                    NEWARRAY -> IntOperandInstruction(NEWARRAY, buffer.get() and 0xff)
-
                     IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT,
                     IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
                     IF_ACMPEQ, IF_ACMPNE -> IntOperandInstruction(opcode, buffer.short.toInt())
 
+
+                    BIPUSH -> IntOperandInstruction(BIPUSH, buffer.get().toInt())
+
+                    RET -> IntOperandInstruction(RET, buffer.get() and 0xff)
+                    LDC -> IntOperandInstruction(LDC, buffer.get() and 0xff)
+                    NEWARRAY -> IntOperandInstruction(NEWARRAY, buffer.get() and 0xff)
+
+
+
+
+                    NEW -> IntOperandInstruction(NEW, buffer.short and 0xff)
                     ANEWARRAY -> IntOperandInstruction(ANEWARRAY, buffer.short and 0xff)
                     LDC_W, LDC2_W -> IntOperandInstruction(opcode, buffer.short and 0xff)
+
+                    INVOKEDYNAMIC -> {
+                        val index: Int = buffer.short and 0xff
+                        check((buffer.get() or buffer.get()) == 0) { "InvokeDynamic padding bytes are non-zero" }
+                        IntOperandInstruction(INVOKEDYNAMIC, index)
+                    }
 
                     CHECKCAST, INSTANCEOF -> IntOperandInstruction(opcode, buffer.short and 0xff)
                     IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> IntOperandInstruction(opcode, buffer.short.toInt())
@@ -98,11 +107,7 @@ object InstructionReader {
                         opcode,
                         buffer.short and 0xff
                     )
-                    INVOKEDYNAMIC -> {
-                        val index: Int = buffer.short and 0xff
-                        check((buffer.get() or buffer.get()) == 0) { "InvokeDynamic padding bytes are non-zero" }
-                        IntOperandInstruction(INVOKEDYNAMIC, index)
-                    }
+
 
 
                     IINC -> BiIntOperandInstruction(IINC, buffer.get() and 0xff, buffer.get().toInt())

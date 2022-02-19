@@ -1,6 +1,8 @@
 package me.coley.cafedude.io
 
 import me.coley.cafedude.instruction.*
+import me.coley.cafedude.instruction.Opcodes.IINC
+import me.coley.cafedude.instruction.Opcodes.MULTIANEWARRAY
 import java.nio.ByteBuffer
 
 class InstructionWriter {
@@ -11,8 +13,17 @@ class InstructionWriter {
             when (insn) {
                 is BasicInstruction -> {}
                 is BiIntOperandInstruction -> {
-                    buffer.put(insn.firstOperand and 0xff)
-                    buffer.put(insn.secondOperand)
+                    when (insn.opcode) {
+                        IINC -> {
+                            buffer.put(insn.firstOperand and 0xff)
+                            buffer.put(insn.secondOperand)
+                        }
+
+                        MULTIANEWARRAY -> {
+                            buffer.putShort((insn.firstOperand and 0xff).toShort())
+                            buffer.put(insn.secondOperand and 0xff)
+                        }
+                    }
                 }
                 is IntOperandInstruction -> {
                     buffer.putShort(insn.operand.toShort())
@@ -44,6 +55,12 @@ class InstructionWriter {
                     buffer.putInt(low)
                     buffer.putInt(high)
                     offsets.forEach { buffer.putInt(it) }
+                }
+                is WideBiIntInstruction -> {
+
+                }
+                is WideIntInstruction -> {
+
                 }
             }
 
