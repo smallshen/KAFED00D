@@ -1,5 +1,7 @@
 package me.coley.cafedude.instruction
 
+import me.coley.cafedude.instruction.Opcodes.MULTIANEWARRAY
+
 /**
  * Instruction with two int operands.
  *
@@ -7,25 +9,18 @@ package me.coley.cafedude.instruction
  */
 class BiIntOperandInstruction(
     opcode: Int,
-    /**
-     * Sets the first instruction operand.
-     *
-     * @param firstOperand New operand.
-     */
     var firstOperand: Int,
-    /**
-     * Sets the second instruction operand.
-     *
-     * @param secondOperand New operand.
-     */
     var secondOperand: Int,
 ) : Instruction(opcode) {
+
     /**
-     * @return first instruction operand.
+     * 1(Opcode: byte) + 1(First operand: byte) + 1(Second operand: byte)
      */
-    /**
-     * @return first instruction operand.
-     */
+    override val size: Int
+        get() = 1 + when (opcode) {
+            MULTIANEWARRAY -> 3
+            else -> 2
+        }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -34,10 +29,12 @@ class BiIntOperandInstruction(
         return if (firstOperand != other.firstOperand) false else secondOperand == other.secondOperand
     }
 
+
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + firstOperand
         result = 31 * result + secondOperand
+        result = 31 * result + size
         return result
     }
 

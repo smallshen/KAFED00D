@@ -5,35 +5,18 @@ import me.coley.cafedude.classfile.behavior.CpAccessor
 import me.coley.cafedude.io.AttributeContext
 
 /**
- * Method code attribute.
- *
- * @author Matt Coley
- */
-class CodeAttribute
-/**
  * @param nameIndex      Name index in constant pool.
- * @param maxStack       Maximum number of values on the stack in the method.
- * @param maxLocals      Maximum number of local variables used in the method.
- * @param code           Instruction code data.
- * @param exceptionTable Exception table entries.
- * @param attributes     List of other attributes.
- */(
+ * @property maxStack       Maximum number of values on the stack in the method.
+ * @property maxLocals      Maximum number of local variables used in the method.
+ * @property code           Instruction code data.
+ * @property exceptionTable Exception table entries.
+ * @property attributes     List of other attributes.
+ */
+class CodeAttribute(
     nameIndex: Int,
-    /**
-     * @param maxStack New maximum number of values on the stack in the method.
-     */
     var maxStack: Int,
-    /**
-     * @param maxLocals New maximum number of local variables used in the method.
-     */
     var maxLocals: Int,
-    /**
-     * @param code New instruction code data.
-     */
     var code: ByteArray,
-    /**
-     * @param exceptionTable New exception table entries.
-     */
     var exceptionTable: List<ExceptionTableEntry>,
     override var attributes: List<Attribute>,
 ) : Attribute(nameIndex), AttributeHolder {
@@ -68,47 +51,17 @@ class CodeAttribute
     }
 
     /**
-     * Exception table entry representation.
-     *
-     * @author Matt Coley
+     * @property startPc        Instruction offset for start of try-catch range.
+     * @property endPc          Instruction offset for end of try-catch range.
+     * @property handlerPc      Instruction offset for start of catch handler range.
+     * @property catchTypeIndex Index in constant pool of class type to catch.
      */
-    class ExceptionTableEntry
-    /**
-     * @param startPc        Instruction offset for start of try-catch range.
-     * @param endPc          Instruction offset for end of try-catch range.
-     * @param handlerPc      Instruction offset for start of catch handler range.
-     * @param catchTypeIndex Index in constant pool of class type to catch.
-     */(
-        /**
-         * @param startPc New instruction offset for start of try-catch range.
-         */
+    class ExceptionTableEntry(
         var startPc: Int,
-        /**
-         * @param endPc New instruction offset for end of try-catch range.
-         */
         var endPc: Int,
-        /**
-         * @param handlerPc New instruction offset for start of catch handler range.
-         */
         var handlerPc: Int,
-        /**
-         * @param catchTypeIndex Index in constant pool of class type to catch.
-         */
         var catchTypeIndex: Int,
     ) : CpAccessor {
-        /**
-         * @return Instruction offset for start of try-catch range.
-         */
-        /**
-         * @return Instruction offset for end of try-catch range.
-         */
-        /**
-         * @return Instruction offset for start of catch handler range.
-         */
-        /**
-         * @return Index in constant pool of class type to catch.
-         */
-
         override fun cpAccesses(): MutableSet<Int> {
             return mutableSetOf(catchTypeIndex)
         }

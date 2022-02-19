@@ -22,7 +22,8 @@ class InstructionWriter {
                     val pos = buffer.position()
 
                     // TODO: check it, might be wrong
-                    buffer.position(pos + (4 - pos and 3))
+                    // the tableswitch and lookupswitch 32-bit offsets will be 4-byte aligned.
+                    buffer.position(pos + 3)
                     buffer.putInt(default)
 //                    buffer.putInt(keys.size)
                     buffer.putInt(keys.count())
@@ -37,7 +38,8 @@ class InstructionWriter {
                     val pos = buffer.position()
 
                     // TODO: check it, might be wrong
-                    buffer.position(pos + (4 - pos and 3))
+                    // the tableswitch and lookupswitch 32-bit offsets will be 4-byte aligned.
+                    buffer.position(pos + 3)
                     buffer.putInt(default)
                     buffer.putInt(low)
                     buffer.putInt(high)

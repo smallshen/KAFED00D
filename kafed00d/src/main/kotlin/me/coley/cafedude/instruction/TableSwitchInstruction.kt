@@ -1,39 +1,19 @@
 package me.coley.cafedude.instruction
 
 /**
- * Table Switch instruction.
- *
- * @author xDark
- */
-data class TableSwitchInstruction
-/**
  * @param dflt    Default branch offset.
  * @param low     Minimmum value.
  * @param high    Maximum value.
  * @param offsets Branch offsets.
- */(
-    /**
-     * Sets default branch offset.
-     *
-     * @param dflt New offset.
-     */
+ */
+data class TableSwitchInstruction(
     var default: Int,
-    /**
-     * Sets minimum value.
-     *
-     * @param low New value.
-     */
     var low: Int,
-    /**
-     * Sets maximum value.
-     *
-     * @param high New value.
-     */
     var high: Int,
-    /**
-     * Sets branch offsets.
-     *
-     * @param offsets New offsets.
-     */
     var offsets: List<Int>,
-) : Instruction(Opcodes.TABLESWITCH)
+) : Instruction(Opcodes.TABLESWITCH) {
+    /**
+     * 4(Opcode + padding) + 4(low) + 4(high) + (offsets.size * 4(index))
+     */
+    override val size: Int = 12 + (offsets.size * 4)
+}

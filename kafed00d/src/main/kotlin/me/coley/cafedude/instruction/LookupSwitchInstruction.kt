@@ -1,44 +1,19 @@
 package me.coley.cafedude.instruction
 
 /**
- * Lookup Switch instruction.
- *
- * @author xDark
- */
-data class LookupSwitchInstruction
-/**
  * @param dflt    Default branch offset.
  * @param keys    Lookup keys in a sorted order.
  * @param offsets Branch offsets.
- */(
-    /**
-     * Sets default branch offset.
-     *
-     * @param dflt New offset.
-     */
+ */
+data class LookupSwitchInstruction(
     var default: Int,
-    /**
-     * Sets lookup keys.
-     *
-     * @param keys New keys.
-     */
     var keys: List<Int>,
-    /**
-     * Sets branch offsets.
-     *
-     * @param offsets New offsets.
-     */
     var offsets: List<Int>,
 ) : Instruction(Opcodes.LOOKUPSWITCH) {
     /**
-     * @return default branch offset.
+     * 4(Opcode + padding) + 4(count) + (offsets.size * (4(key) + 4(offset)))
      */
-    /**
-     * @return lookup keys.
-     */
-    /**
-     * @return branch offsets.
-     */
+    override val size: Int = 8 + (offsets.size * 8)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

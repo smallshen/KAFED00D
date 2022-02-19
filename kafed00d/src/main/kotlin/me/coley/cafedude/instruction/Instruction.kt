@@ -1,24 +1,14 @@
 package me.coley.cafedude.instruction
 
 /**
- * Node that represents bytecode instruction.
- *
- * @author xDark
+ * @property opcode Instruction opcode.
  */
-sealed class Instruction
-/**
- * @param opcode Instruction opcode.
- */ protected constructor(
+sealed class Instruction(var opcode: Int) {
+
     /**
-     * Sets instruction opcode.
-     *
-     * @param opcode New opcode.
+     * Size of instruction bytes
      */
-    var opcode: Int,
-) {
-    /**
-     * @return instruction opcode.
-     */
+    abstract val size: Int
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
