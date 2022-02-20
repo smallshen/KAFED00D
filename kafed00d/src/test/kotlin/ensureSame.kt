@@ -22,6 +22,7 @@ fun main() {
                 val new = InstructionWriter.write(instrunctions)
                 println(new.size)
                 println(it.code.size)
+                require(new.contentEquals(it.code))
             }
         }
     }
@@ -29,6 +30,6 @@ fun main() {
 //    InstructionReader.read(classFile.methods.first().attributes.filterIsInstance<CodeAttribute>().first())
 
     File("run/out/Test.class").writeBytes(newBytes)
-    println(bytes.contentEquals(newBytes))
+    require(bytes.contentEquals(newBytes))
     println(bytes.size - newBytes.size)
 }
