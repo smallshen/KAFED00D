@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package me.coley.cafedude.io
 
 import me.coley.cafedude.classfile.attribute.CodeAttribute
@@ -65,7 +67,6 @@ object InstructionReader {
                     I2L, I2F, I2D, L2I, L2F, L2D, F2I, F2L, F2D, D2I, D2L, D2F, I2B, I2C, I2S -> BasicInstruction(opcode)
 
 
-
                     GOTO_W, JSR_W -> IntOperandInstruction(opcode, buffer.int)
 
                     JSR -> IntOperandInstruction(JSR, buffer.short.toInt())
@@ -82,8 +83,6 @@ object InstructionReader {
                     RET -> IntOperandInstruction(RET, buffer.get() and 0xff)
                     LDC -> IntOperandInstruction(LDC, buffer.get() and 0xff)
                     NEWARRAY -> IntOperandInstruction(NEWARRAY, buffer.get() and 0xff)
-
-
 
 
                     NEW -> IntOperandInstruction(NEW, buffer.short and 0xff)
@@ -107,9 +106,6 @@ object InstructionReader {
                     IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> IntOperandInstruction(opcode, buffer.short.toInt())
                     ISTORE, LSTORE, FSTORE, DSTORE, ASTORE -> IntOperandInstruction(opcode, buffer.get().toInt())
                     ILOAD, LLOAD, FLOAD, DLOAD, ALOAD -> IntOperandInstruction(opcode, buffer.get() and 0xff)
-
-
-
 
 
                     IINC -> BiIntOperandInstruction(IINC, buffer.get() and 0xff, buffer.get().toInt())
