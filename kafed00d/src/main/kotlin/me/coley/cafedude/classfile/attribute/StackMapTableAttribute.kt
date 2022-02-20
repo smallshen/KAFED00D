@@ -120,15 +120,7 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
      * Indicates that the location has the verification type which is the class
      * represented by the CONSTANT_Class_info found at classIndex.
      */
-    class ObjectVariableInfo
-    /**
-     * @param classIndex Index of the ClassConstant representing type of this variable.
-     */(
-        /**
-         * The index of the ClassConstant denoting the type of this variable.
-         */
-        var classIndex: Int,
-    ) : TypeInfo() {
+    data class ObjectVariableInfo(val classIndex: Int) : TypeInfo() {
 
         // u2: cpool_index
         /**
@@ -153,17 +145,7 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
     /**
      * Indicates that the location has the verification type uninitialized.
      */
-    class UninitializedVariableInfo
-    /**
-     * @param offset The offset in the code of the new instruction that
-     * created the object being stored in the location.
-     */(
-        /**
-         * Indicates the offset in the code of the new instruction that created
-         * the object being stored in the location.
-         */
-        var offset: Int,
-    ) : TypeInfo() {
+    data class UninitializedVariableInfo(val offset: Int) : TypeInfo() {
         /**
          * @return The one byte tag representing this type.
          */
@@ -212,15 +194,7 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
      * initial frame of the method. In that case, the bytecode offset at which the
      * stack map frame applies is the value `offset_delta` specified in the frame.
      */
-    abstract class StackMapFrame
-    /**
-     * @param offsetDelta The offset delta of this frame.
-     */(
-        /**
-         * The offset delta of this frame.
-         */
-        var offsetDelta: Int,
-    ) : CpAccessor {
+    abstract class StackMapFrame(val offsetDelta: Int) : CpAccessor {
         /**
          * @return The one byte frame type representing this frame.
          */
@@ -242,14 +216,7 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
      * This frame type indicates that the frame has exactly the same local
      * variables as the previous frame and that the operand stack is empty.
      */
-    class SameFrame
-    /**
-     * @param offsetDelta The offset delta of this frame.
-     */
-        (offsetDelta: Int) : StackMapFrame(offsetDelta) {
-        /**
-         * @return The one byte frame type representing this frame.
-         */
+    class SameFrame(offsetDelta: Int) : StackMapFrame(offsetDelta) {
         override val frameType: Int
             get() = StackMapTable.SAME_FRAME_MIN + offsetDelta
     }
@@ -261,18 +228,12 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
      * `frame_type - 64`
      * <br></br>
      * The verification type of the one stack entry appears after the frame type.
+     *
+     *
+     * @property offsetDelta The offset delta of this frame.
+     * @property stack       The singular stack item.
      */
-    class SameLocalsOneStackItem
-    /**
-     * @param offsetDelta The offset delta of this frame.
-     * @param stack       The singular stack item.
-     */(
-        offsetDelta: Int,
-        /**
-         * The singular stack item.
-         */
-        var stack: TypeInfo,
-    ) : StackMapFrame(offsetDelta) {
+    class SameLocalsOneStackItem(offsetDelta: Int, val stack: TypeInfo) : StackMapFrame(offsetDelta) {
         // verification_type_info stack
 
         /**
@@ -296,18 +257,12 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
 
     /**
      * Same as [SameLocalsOneStackItem] except has an explicit `offsetDelta`.
-     */
-    class SameLocalsOneStackItemExtended
-    /**
+     *
+     *
      * @param offsetDelta The offset delta of this frame.
      * @param stack       The singular stack item.
-     */(
-        offsetDelta: Int,
-        /**
-         * The singular stack item.
-         */
-        var stack: TypeInfo,
-    ) : StackMapFrame(offsetDelta) {
+     */
+    class SameLocalsOneStackItemExtended(offsetDelta: Int, val stack: TypeInfo) : StackMapFrame(offsetDelta) {
         // u2: offset_delta
         // verification_type_info stack
 
@@ -334,21 +289,13 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
     /**
      * This frame type indicates that the frame has the same local variables as
      * the previous frame except that a given number of the last local variables
-     * are absent, and that the operand stack is empty.
-     */
-    class ChopFrame
-    /**
+     *
+     *
      * @param offsetDelta     The offset delta of this frame.
      * @param absentVariables The number of chopped local variables.
      * absent.
      */// u1: frame_type
-        (
-        offsetDelta: Int,
-        /**
-         * The number of the last local variables that are now absent.
-         */
-        var absentVariables: Int,
-    ) : StackMapFrame(offsetDelta) {
+    class ChopFrame(offsetDelta: Int, val absentVariables: Int) : StackMapFrame(offsetDelta) {
         // u2: offset_delta
         /**
          * @return Size in bytes of the serialized frame.
@@ -371,19 +318,12 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
      * This frame type indicates that the frame has exactly the same local
      * variables as the previous frame and that the operand stack is empty.
      */
-    class SameFrameExtended
-    /**
-     * @param offsetDelta The offset delta of this frame.
-     */
-        (offsetDelta: Int) : StackMapFrame(offsetDelta) {// u1: frame_type
-        // u2: offset_delta
+    class SameFrameExtended(offsetDelta: Int) : StackMapFrame(offsetDelta) {
         /**
          * @return Size in bytes of the serialized frame.
          */
         override val length: Int
-            get() =// u1: frame_type
-                // u2: offset_delta
-                1 + 2
+            get() = 1 + 2
 
         /**
          * @return The one byte frame type representing this frame.
@@ -396,18 +336,11 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
      * This frame type indicates that the frame has the same locals as the
      * previous frame except that a number of additional locals are defined, and
      * that the operand stack is empty.
+     *
+     * @property offsetDelta      The offset delta of this frame.
+     * @property additionalLocals The additional locals defined in the frame.
      */
-    class AppendFrame
-    /**
-     * @param offsetDelta      The offset delta of this frame.
-     * @param additionalLocals The additional locals defined in the frame.
-     */(
-        offsetDelta: Int,
-        /**
-         * Additional locals defined in the current frame.
-         */
-        var additionalLocals: List<TypeInfo>,
-    ) : StackMapFrame(offsetDelta) {
+    class AppendFrame(offsetDelta: Int, val additionalLocals: List<TypeInfo>) : StackMapFrame(offsetDelta) {
         // u2: offset_delta
         // verification_type_info locals[frame_type - 251]
 
@@ -441,22 +374,15 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
 
     /**
      * Contains the full types of the current frame.
+     *
+     * @property offsetDelta The offset delta of this frame.
+     * @property locals      The local variable types of the current frame.
+     * @property stack       The types of the current frame's stack.
      */
-    class FullFrame
-    /**
-     * @param offsetDelta The offset delta of this frame.
-     * @param locals      The local variable types of the current frame.
-     * @param stack       The types of the current frame's stack.
-     */(
+    class FullFrame(
         offsetDelta: Int,
-        /**
-         * The local variable types of the current frame.
-         */
-        var locals: List<TypeInfo>,
-        /**
-         * The types of the current frame's stack.
-         */
-        var stack: List<TypeInfo>,
+        val locals: List<TypeInfo>,
+        val stack: List<TypeInfo>
     ) : StackMapFrame(offsetDelta) {
         // u2: offset_delta
         // u2 number_of_locals
@@ -465,6 +391,7 @@ class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : 
         // verification_type_info stack[number_of_stack_items]
 
         /**
+         *
          * @return Size in bytes of the serialized frame.
          */
         override val length: Int
