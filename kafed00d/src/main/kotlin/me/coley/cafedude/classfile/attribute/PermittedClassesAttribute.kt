@@ -3,22 +3,11 @@ package me.coley.cafedude.classfile.attribute
 /**
  * Permitted classes attribute.
  *
- * @author Matt Coley
+ *
+ * @property nameIndex Name index in constant pool.
+ * @property classes   Indices of allowed `CP_CLASS` values.
  */
-class PermittedClassesAttribute
-/**
- * @param nameIndex Name index in constant pool.
- * @param classes   Indices of allowed `CP_CLASS` values.
- */(
-    nameIndex: Int,
-    /**
-     * @param classes New indices of allowed `CP_CLASS` values.
-     */
-    var classes: List<Int>,
-) : Attribute(nameIndex) {
-    /**
-     * @return Indices of allowed `CP_CLASS` values.
-     */
+class PermittedClassesAttribute(nameIndex: Int, val classes: List<Int>) : Attribute(nameIndex) {
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()

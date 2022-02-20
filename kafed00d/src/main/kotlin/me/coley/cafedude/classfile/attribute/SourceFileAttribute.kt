@@ -3,19 +3,11 @@ package me.coley.cafedude.classfile.attribute
 /**
  * Source file attribute.
  *
- * @author Matt Coley
+ *
+ * @property nameIndex           Name index in constant pool.
+ * @property sourceFileNameIndex UTF8 index in constant pool of the source file name.
  */
-class SourceFileAttribute
-/**
- * @param nameIndex           Name index in constant pool.
- * @param sourceFileNameIndex UTF8 index in constant pool of the source file name.
- */(
-    nameIndex: Int,
-    /**
-     * @param sourceFileNameIndex UTF8 index in constant pool of the source file name.
-     */
-    var sourceFileNameIndex: Int,
-) : Attribute(nameIndex) {
+class SourceFileAttribute(nameIndex: Int, val sourceFileNameIndex: Int) : Attribute(nameIndex) {
     /**
      * @return UTF8 index in constant pool of the source file name.
      */

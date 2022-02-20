@@ -6,17 +6,9 @@ import java.util.*
 /**
  * Base attribute.
  *
- * @author Matt Coley
+ * @property nameIndex Name index in constant pool.
  */
-abstract class Attribute
-/**
- * @param nameIndex Name index in constant pool.
- */(
-    /**
-     * @return Name index in constant pool.
-     */
-    val nameIndex: Int,
-) : CpAccessor {
+abstract class Attribute(val nameIndex: Int) : CpAccessor {
 
     /**
      * @return Computed size for the internal length value of this attribute for serialization.

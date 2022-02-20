@@ -16,24 +16,11 @@ import java.util.*
  * @see AnnotationsAttribute
  *
  * @see ParameterAnnotationsAttribute
+ *
+ * @property typeIndex Annotation descriptor index.
+ * @property values    Annotation key-value pairs. Keys point to UTF8 constants.
  */
-open class Annotation
-/**
- * @param typeIndex Annotation descriptor index.
- * @param values    Annotation key-value pairs. Keys point to UTF8 constants.
- */(
-    /**
-     * @return Annotation descriptor index.
-     */
-    val typeIndex: Int,
-    /**
-     * The annotation's key-value pairs. Keys point to UTF8 constants.
-     *
-     * @return Annotation key-value pairs.
-     * @see ElementValue Values.
-     */
-    val values: Map<Int, ElementValue>,
-) : CpAccessor {
+open class Annotation(val typeIndex: Int, val values: Map<Int, ElementValue>) : CpAccessor {
 
     override fun cpAccesses(): MutableSet<Int> {
         val set: MutableSet<Int> = TreeSet()

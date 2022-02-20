@@ -22,17 +22,23 @@ object AttributeContexts {
     fun getAllowedContexts(attributeName: String?): Collection<AttributeContext> {
         return when (attributeName) {
             BOOTSTRAP_METHODS, ENCLOSING_METHOD, INNER_CLASSES, MODULE, MODULE_MAIN_CLASS, MODULE_PACKAGES, NEST_HOST, NEST_MEMBERS, PERMITTED_SUBCLASSES, RECORD, SOURCE_DEBUG_EXTENSION, SOURCE_FILE -> EnumSet.of(
-                AttributeContext.CLASS)
+                AttributeContext.CLASS
+            )
             CONSTANT_VALUE -> EnumSet.of(AttributeContext.FIELD)
             ANNOTATION_DEFAULT, CODE, EXCEPTIONS, METHOD_PARAMETERS, RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS, RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS -> EnumSet.of(
-                AttributeContext.METHOD)
-            DEPRECATED, SYNTHETIC -> EnumSet.of(AttributeContext.CLASS,
+                AttributeContext.METHOD
+            )
+            DEPRECATED, SYNTHETIC -> EnumSet.of(
+                AttributeContext.CLASS,
                 AttributeContext.FIELD,
-                AttributeContext.METHOD)
+                AttributeContext.METHOD
+            )
             LINE_NUMBER_TABLE, LOCAL_VARIABLE_TABLE, LOCAL_VARIABLE_TYPE_TABLE, STACK_MAP_TABLE -> EnumSet.of(
-                AttributeContext.ATTRIBUTE)
+                AttributeContext.ATTRIBUTE
+            )
             RUNTIME_VISIBLE_ANNOTATIONS, RUNTIME_VISIBLE_TYPE_ANNOTATIONS, RUNTIME_INVISIBLE_ANNOTATIONS, RUNTIME_INVISIBLE_TYPE_ANNOTATIONS, SIGNATURE -> EnumSet.allOf(
-                AttributeContext::class.java)
+                AttributeContext::class.java
+            )
             else -> EnumSet.allOf(AttributeContext::class.java)
         }
     }

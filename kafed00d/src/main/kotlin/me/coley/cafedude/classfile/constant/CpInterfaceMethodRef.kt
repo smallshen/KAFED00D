@@ -8,5 +8,7 @@ import me.coley.cafedude.Constants
  *
  * @author Matt Coley
  */
-class CpInterfaceMethodRef(classIndex: Int, nameTypeIndex: Int) :
-    ConstRef(Constants.ConstantPool.INTERFACE_METHOD_REF, classIndex, nameTypeIndex)
+class CpInterfaceMethodRef(
+    classIndex: Int,
+    nameTypeIndex: Int
+) : ConstRef(Constants.ConstantPool.INTERFACE_METHOD_REF, classIndex, nameTypeIndex)

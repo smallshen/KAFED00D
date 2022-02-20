@@ -1,6 +1,6 @@
 package me.coley.cafedude.io
 
-import me.coley.cafedude.Constants
+import me.coley.cafedude.Constants.ConstantPool.*
 import me.coley.cafedude.InvalidClassException
 import me.coley.cafedude.classfile.ClassFile
 import me.coley.cafedude.classfile.Field
@@ -77,36 +77,36 @@ class ClassFileWriter {
         val tag = entry.tag
         out.writeByte(tag)
         when (tag) {
-            Constants.ConstantPool.UTF8 -> out.writeUTF((entry as CpUtf8).text)
-            Constants.ConstantPool.INTEGER -> out.writeInt((entry as CpInt).value)
-            Constants.ConstantPool.FLOAT -> out.writeFloat((entry as CpFloat).value)
-            Constants.ConstantPool.LONG -> out.writeLong((entry as CpLong).value)
-            Constants.ConstantPool.DOUBLE -> out.writeDouble((entry as CpDouble).value)
-            Constants.ConstantPool.STRING -> out.writeShort((entry as CpString).index)
-            Constants.ConstantPool.CLASS -> out.writeShort((entry as CpClass).index)
-            Constants.ConstantPool.FIELD_REF, Constants.ConstantPool.METHOD_REF, Constants.ConstantPool.INTERFACE_METHOD_REF -> {
+            UTF8 -> out.writeUTF((entry as CpUtf8).text)
+            INTEGER -> out.writeInt((entry as CpInt).value)
+            FLOAT -> out.writeFloat((entry as CpFloat).value)
+            LONG -> out.writeLong((entry as CpLong).value)
+            DOUBLE -> out.writeDouble((entry as CpDouble).value)
+            STRING -> out.writeShort((entry as CpString).index)
+            CLASS -> out.writeShort((entry as CpClass).index)
+            FIELD_REF, METHOD_REF, INTERFACE_METHOD_REF -> {
                 out.writeShort((entry as ConstRef).classIndex)
                 out.writeShort(entry.nameTypeIndex)
             }
-            Constants.ConstantPool.NAME_TYPE -> {
+            NAME_TYPE -> {
                 out.writeShort((entry as CpNameType).nameIndex)
                 out.writeShort(entry.typeIndex)
             }
-            Constants.ConstantPool.DYNAMIC -> {
+            DYNAMIC -> {
                 out.writeShort((entry as CpDynamic).bsmIndex)
                 out.writeShort(entry.nameTypeIndex)
             }
-            Constants.ConstantPool.METHOD_HANDLE -> {
+            METHOD_HANDLE -> {
                 out.writeByte((entry as CpMethodHandle).kind.toInt())
                 out.writeShort(entry.referenceIndex)
             }
-            Constants.ConstantPool.METHOD_TYPE -> out.writeShort((entry as CpMethodType).index)
-            Constants.ConstantPool.INVOKE_DYNAMIC -> {
+            METHOD_TYPE -> out.writeShort((entry as CpMethodType).index)
+            INVOKE_DYNAMIC -> {
                 out.writeShort((entry as CpInvokeDynamic).bsmIndex)
                 out.writeShort(entry.nameTypeIndex)
             }
-            Constants.ConstantPool.MODULE -> out.writeShort((entry as CpModule).index)
-            Constants.ConstantPool.PACKAGE -> out.writeShort((entry as CpPackage).index)
+            MODULE -> out.writeShort((entry as CpModule).index)
+            PACKAGE -> out.writeShort((entry as CpPackage).index)
             else -> throw InvalidClassException("Unknown constant-pool tag: $tag")
         }
     }

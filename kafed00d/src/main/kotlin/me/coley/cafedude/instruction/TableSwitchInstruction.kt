@@ -1,19 +1,19 @@
 package me.coley.cafedude.instruction
 
 /**
- * @param dflt    Default branch offset.
- * @param low     Minimmum value.
- * @param high    Maximum value.
- * @param offsets Branch offsets.
+ * @property default    Default branch offset.
+ * @property low     Minimum value.
+ * @property high    Maximum value.
+ * @property offsets Branch offsets.
  */
 data class TableSwitchInstruction(
-    var default: Int,
-    var low: Int,
-    var high: Int,
-    var offsets: List<Int>,
+    val default: Int,
+    val low: Int,
+    val high: Int,
+    val offsets: List<Int>,
 ) : Instruction(Opcodes.TABLESWITCH) {
     /**
      * 4(Opcode + padding) + 4(default) + 4(low) + 4(high) + (offsets.size * 4(index))
      */
-    override val size: Int = 16 + (offsets.size * 4)
+    override val length: Int = 16 + (offsets.size * 4)
 }

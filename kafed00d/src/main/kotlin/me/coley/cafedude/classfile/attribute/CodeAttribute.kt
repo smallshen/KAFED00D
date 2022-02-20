@@ -5,7 +5,7 @@ import me.coley.cafedude.classfile.behavior.CpAccessor
 import me.coley.cafedude.io.AttributeContext
 
 /**
- * @param nameIndex      Name index in constant pool.
+ * @property nameIndex      Name index in constant pool.
  * @property maxStack       Maximum number of values on the stack in the method.
  * @property maxLocals      Maximum number of local variables used in the method.
  * @property code           Instruction code data.
@@ -18,7 +18,7 @@ class CodeAttribute(
     var maxLocals: Int,
     var code: ByteArray,
     var exceptionTable: List<ExceptionTableEntry>,
-    override var attributes: List<Attribute>,
+    override val attributes: List<Attribute>,
 ) : Attribute(nameIndex), AttributeHolder {
 
     override val holderType: AttributeContext = AttributeContext.ATTRIBUTE

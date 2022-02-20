@@ -5,21 +5,11 @@ import me.coley.cafedude.classfile.annotation.ElementValue
 /**
  * Represents the default value of a annotation field *(Which are technically methods, but I digress)*.
  *
- * @author Matt Coley
- */
-class AnnotationDefaultAttribute
-/**
- * @param nameIndex    Name index in constant pool.
- * @param elementValue Value of the annotation type element represented by the `method_info` structure
+ * @property nameIndex    Name index in constant pool.
+ * @property elementValue Value of the annotation type element represented by the `method_info` structure
  * enclosing this attribute.
- */(
-    nameIndex: Int,
-    /**
-     * @return Value of the annotation type element represented by the `method_info` structure
-     * enclosing this attribute.
-     */
-    val elementValue: ElementValue,
-) : Attribute(nameIndex) {
+ */
+class AnnotationDefaultAttribute(nameIndex: Int, val elementValue: ElementValue) : Attribute(nameIndex) {
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()

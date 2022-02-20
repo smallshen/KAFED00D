@@ -3,24 +3,11 @@ package me.coley.cafedude.classfile.attribute
 /**
  * Checked exceptions attribute.
  *
- * @author JCWasmx86
- */
-class ExceptionsAttribute
-/**
- * @param nameIndex           Name index in constant pool.
- * @param exceptionIndexTable Indices into the constant pool representing all checked exceptions
+ * @property nameIndex           Name index in constant pool.
+ * @property exceptionIndexTable Indices into the constant pool representing all checked exceptions
  * that may be thrown by this method.
- */(
-    nameIndex: Int,
-    /**
-     * @param exceptionIndexTable Indices into the constant pool representing all checked exceptions
-     * that may be thrown by this method.
-     */
-    var exceptionIndexTable: List<Int>,
-) : Attribute(nameIndex) {
-    /**
-     * @return Exception index table.
-     */
+ */
+class ExceptionsAttribute(nameIndex: Int, val exceptionIndexTable: List<Int>) : Attribute(nameIndex) {
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()

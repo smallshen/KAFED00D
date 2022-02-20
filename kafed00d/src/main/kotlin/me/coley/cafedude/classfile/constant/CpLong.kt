@@ -7,16 +7,6 @@ import me.coley.cafedude.Constants
  *
  * @author Matt Coley
  */
-class CpLong(
-    /**
-     * @param value New constant value.
-     */
-    var value: Long,
-) : ConstPoolEntry(Constants.ConstantPool.LONG) {
-    /**
-     * @return Constant value.
-     */
-
-    override val isWide: Boolean
-        get() = true
+data class CpLong(val value: Long) : ConstPoolEntry(Constants.ConstantPool.LONG) {
+    override val isWide: Boolean = true
 }

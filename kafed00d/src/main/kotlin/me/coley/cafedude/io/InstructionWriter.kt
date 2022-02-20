@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 
 object InstructionWriter {
     fun write(instructions: List<Instruction>): ByteArray {
-        val buffer = ByteBuffer.allocate(instructions.sumOf { it.size })
+        val buffer = ByteBuffer.allocate(instructions.sumOf { it.length })
         instructions.forEach { insn ->
             buffer.put(insn.opcode and 0xff)
             when (insn) {

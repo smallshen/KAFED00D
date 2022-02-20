@@ -15,19 +15,11 @@ import java.util.*
  * map attribute (§4.10.1). This implicit stack map attribute is equivalent to
  * a StackMapTable attribute with number_of_entries equal to zero.
  *
- * @author x4e
+ *
+ * @property nameIndex Name index in constant pool.
+ * @property frames    Stack map frames of a method.
  */
-class StackMapTableAttribute
-/**
- * @param nameIndex Name index in constant pool.
- * @param frames    Stack map frames of a method.
- */(
-    nameIndex: Int,
-    /**
-     * A list of this table's stack map frames.
-     */
-    val frames: List<StackMapFrame>,
-) : Attribute(nameIndex), StackMapTable {
+class StackMapTableAttribute(nameIndex: Int, val frames: List<StackMapFrame>) : Attribute(nameIndex), StackMapTable {
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()
         for (frame in frames) set.addAll(frame.cpAccesses())

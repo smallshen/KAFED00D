@@ -5,15 +5,11 @@ package me.coley.cafedude.instruction
  *
  * @author xDark
  */
-open class BasicInstruction(opcode: Int) : Instruction(opcode) {
+data class BasicInstruction(override val opcode: Int) : Instruction(opcode) {
 
     /**
      * Single byte, the opcode
      */
-    override val size: Int = 1
+    override val length: Int = 1
 
-
-    override fun toString(): String {
-        return "insn($opcode)"
-    }
 }

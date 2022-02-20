@@ -6,7 +6,7 @@ import me.coley.cafedude.io.AttributeContext
 /**
  * @param attributes Attributes of the method.
  * @param access     Method access flags.
- * @param nameIndex  Index of name UTF in pool.
+ * @property nameIndex  Index of name UTF in pool.
  * @param typeIndex  Index of descriptor UTF in pool.
  */
 class Method(

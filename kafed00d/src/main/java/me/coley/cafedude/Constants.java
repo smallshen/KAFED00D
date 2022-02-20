@@ -7,6 +7,7 @@ import me.coley.cafedude.classfile.annotation.TargetInfoType;
  *
  * @author Matt Coley
  */
+@SuppressWarnings("unused")
 public interface Constants {
     // TODO: Document and add TLDR what in the class file changed between each version
     int JAVA1 = 45;

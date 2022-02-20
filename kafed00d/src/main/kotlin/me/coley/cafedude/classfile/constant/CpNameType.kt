@@ -5,19 +5,7 @@ import me.coley.cafedude.Constants
 /**
  * NameType pool entry. Points to two UTF constants.
  *
- * @author Matt Coley
+ * @property nameIndex Index of name UTF string in pool.
+ * @property typeIndex Index of descriptor UTF string in pool.
  */
-class CpNameType
-/**
- * @param nameIndex Index of name UTF string in pool.
- * @param typeIndex Index of descriptor UTF string in pool.
- */(
-    /**
-     * @param nameIndex New index of name UTF string in pool.
-     */
-    var nameIndex: Int,
-    /**
-     * @param typeIndex New index of descriptor UTF string in pool.
-     */
-    var typeIndex: Int,
-) : ConstPoolEntry(Constants.ConstantPool.NAME_TYPE)
+data class CpNameType(val nameIndex: Int, val typeIndex: Int) : ConstPoolEntry(Constants.ConstantPool.NAME_TYPE)

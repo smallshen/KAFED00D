@@ -7,85 +7,31 @@ import java.util.*
 /**
  * Module attribute.
  *
- * @author Matt Coley
- */
-class ModuleAttribute
-/**
  * @param attrNameIndex Name index in constant pool of attribute.
- * @param moduleIndex   Constant pool index of [module name][CpModule].
- * @param flags         Module flags, see
+ * @property moduleIndex   Constant pool index of [module name][CpModule].
+ * @property flags         Module flags, see
  * `ACC_OPEN / 0x0020`,
  * `ACC_SYNTHETIC / 0x1000`, and
  * `ACC_MANDATED / 0x8000`
- * @param versionIndex  Index in constant pool of module version utf8, or 0 if no version info.
- * @param requires      The [Requires] items.
- * @param exports       The [Exports] items.
- * @param opens         The [Opens] items.
- * @param uses          The uses list.
- * @param provides      The [Provides] items.
- */(
+ * @property versionIndex  Index in constant pool of module version utf8, or 0 if no version info.
+ * @property requires      The [Requires] items.
+ * @property exports       The [Exports] items.
+ * @property opens         The [Opens] items.
+ * @property uses          The uses list.
+ * @property provides      The [Provides] items.
+ */
+class ModuleAttribute(
     attrNameIndex: Int,
-    /**
-     * @param moduleIndex New module index.
-     */
-    var moduleIndex: Int,
-    /**
-     * @param flags New module flags.
-     */
-    var flags: Int,
-    /**
-     * @param versionIndex New version index.
-     */
-    var versionIndex: Int,
-    /**
-     * @param requires New require items.
-     */
-    var requires: List<Requires>,
-    /**
-     * @param exports New exports items.
-     */
-    var exports: List<Exports>,
-    /**
-     * @param opens New opens items.
-     */
-    var opens: List<Opens>,
-    /**
-     * @param uses New uses list.
-     */
-    var uses: List<Int>,
-    /**
-     * @param provides The [Provides] items.
-     */
-    var provides: List<Provides>,
+    val moduleIndex: Int,
+    val flags: Int,
+    val versionIndex: Int,
+    val requires: List<Requires>,
+    val exports: List<Exports>,
+    val opens: List<Opens>,
+    val uses: List<Int>,
+    val provides: List<Provides>,
 ) : Attribute(attrNameIndex) {
-    /**
-     * @return Constant pool index of [module][CpModule].
-     */
-    /**
-     * @return Module flags, see
-     * `ACC_OPEN / 0x0020`,
-     * `ACC_SYNTHETIC / 0x1000`, and
-     * `ACC_MANDATED / 0x8000`
-     */
-    /**
-     * @return Index in constant pool of module [version string][CpUtf8], or `0` if no version info.
-     */
-    /**
-     * @return The [Requires] items.
-     */
-    /**
-     * @return The [Exports] items.
-     */
-    /**
-     * @return The [Opens] items.
-     */
-    /**
-     * @return The uses list. Constant pool indices of [service interfaces classes][CpClass] discoverable
-     * by using `ServiceLoader`.
-     */
-    /**
-     * @return The [Provides] items.
-     */
+
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()
@@ -118,28 +64,13 @@ class ModuleAttribute
     /**
      * Module dependencies.
      *
-     * @author Matt Coley
-     */
-    class Requires
-    /**
-     * @param index        Constant pool index of [required module][CpModule].
-     * @param flags        Require flags, see [.getFlags] for more info.
-     * @param versionIndex Index in constant pool of required module [version string][CpUtf8],
+     *
+     * @property index        Constant pool index of [required module][CpModule].
+     * @property flags        Require flags, see [.getFlags] for more info.
+     * @property versionIndex Index in constant pool of required module [version string][CpUtf8],
      * or `0` if no version info.
-     */(
-        /**
-         * @param index New required module index.
-         */
-        var index: Int,
-        /**
-         * @param flags New require flags.
-         */
-        var flags: Int,
-        /**
-         * @param versionIndex New required module version index.
-         */
-        var versionIndex: Int,
-    ) : CpAccessor {
+     */
+    data class Requires(val index: Int, val flags: Int, val versionIndex: Int) : CpAccessor {
         /**
          * @return Constant pool index of [required module][CpModule].
          */

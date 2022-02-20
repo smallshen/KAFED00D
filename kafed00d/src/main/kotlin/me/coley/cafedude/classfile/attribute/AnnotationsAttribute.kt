@@ -9,22 +9,12 @@ import me.coley.cafedude.classfile.annotation.Annotation
  *  * `RuntimeVisibleAnnotations`>
  *
  *
- * @author Matt Coley
- */
-class AnnotationsAttribute
-/**
- * @param nameIndex
+ * @property nameIndex
  * Name index in constant pool.
- * @param annotations
+ * @property annotations
  * List of annotations.
- */(
-    nameIndex: Int,
-    /**
-     * @param annotations
-     * List of annotations.
-     */
-    var annotations: List<Annotation>,
-) : Attribute(nameIndex) {
+ */
+class AnnotationsAttribute(nameIndex: Int, val annotations: List<Annotation>) : Attribute(nameIndex) {
     /**
      * @return List of annotations.
      */
@@ -37,6 +27,6 @@ class AnnotationsAttribute
 
     override fun computeInternalLength(): Int {
         // u2 num_annotations + annotations
-        return 2 + annotations.stream().mapToInt { obj: Annotation -> obj.computeLength() }.sum()
+        return 2 + annotations.sumOf { obj: Annotation -> obj.computeLength() }
     }
 }

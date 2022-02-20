@@ -6,22 +6,11 @@ import java.util.*
 /**
  * Permitted classes attribute.
  *
- * @author Matt Coley
+ * @property nameIndex  Name index in constant pool.
+ * @property components Record components *(fields)*.
  */
-class RecordAttribute
-/**
- * @param nameIndex  Name index in constant pool.
- * @param components Record components *(fields)*.
- */(
-    nameIndex: Int,
-    /**
-     * @param components New record components *(fields)*.
-     */
-    var components: List<RecordComponent>,
-) : Attribute(nameIndex) {
-    /**
-     * @return Record components *(fields)*.
-     */
+class RecordAttribute(nameIndex: Int, val components: List<RecordComponent>) : Attribute(nameIndex) {
+
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()
@@ -37,35 +26,13 @@ class RecordAttribute
 
     /**
      * Component entry.
-     */
-    class RecordComponent
-    /**
-     * @param nameIndex  Index of name of component.
+     *
+     * @property nameIndex  Index of name of component.
      * @param descIndex  Index of field descriptor of component.
      * @param attributes Attributes of the record field.
-     */(
-        /**
-         * @param nameIndex New index of name of component.
-         */
-        var nameIndex: Int,
-        /**
-         * @param descIndex New index of field descriptor of component.
-         */
-        var descIndex: Int,
-        /**
-         * @param attributes New attributes of the record field.
-         */
-        var attributes: List<Attribute>,
-    ) : CpAccessor {
-        /**
-         * @return Index of name of component.
-         */
-        /**
-         * @return Index of field descriptor of component.
-         */
-        /**
-         * @return Attributes of the record field.
-         */
+     */
+    data class RecordComponent(val nameIndex: Int, val descIndex: Int, val attributes: List<Attribute>) : CpAccessor {
+
 
         override fun cpAccesses(): MutableSet<Int> {
             val set: MutableSet<Int> = TreeSet()

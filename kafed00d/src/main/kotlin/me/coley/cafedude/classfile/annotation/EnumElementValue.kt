@@ -19,14 +19,14 @@ class EnumElementValue(tag: Char, typeIndex: Int, nameIndex: Int) : ElementValue
      * @return Index of enum value name constant.
      */
     /**
-     * @param nameIndex Index of enum value name constant.
+     * @property nameIndex Index of enum value name constant.
      */
     var nameIndex: Int
 
     /**
      * @param tag       ASCII tag representation, must be `e`.
      * @param typeIndex Index of enum type descriptor constant.
-     * @param nameIndex Index of enum value name constant.
+     * @property nameIndex Index of enum value name constant.
      */
     init {
         require(tag == 'e') { "UTF8 element value must have 'e' tag" }

@@ -3,22 +3,10 @@ package me.coley.cafedude.classfile.attribute
 /**
  * Line numbers attribute.
  *
- * @author Matt Coley
+ * @property nameIndex Name index in constant pool.
+ * @property entries   Line number table entries.
  */
-class LineNumberTableAttribute
-/**
- * @param nameIndex Name index in constant pool.
- * @param entries   Line number table entries.
- */(
-    nameIndex: Int,
-    /**
-     * @param entries New table entries.
-     */
-    var entries: List<LineEntry>,
-) : Attribute(nameIndex) {
-    /**
-     * @return Table entries.
-     */
+class LineNumberTableAttribute(nameIndex: Int, val entries: List<LineEntry>) : Attribute(nameIndex) {
 
     override fun computeInternalLength(): Int {
         // u2: line_number_table_length
@@ -28,19 +16,9 @@ class LineNumberTableAttribute
 
     /**
      * Line number table entry.
+     *
+     * @property startPc Start offset in bytecode.
+     * @property line    The line number at offset.
      */
-    class LineEntry
-    /**
-     * @param startPc Start offset in bytecode.
-     * @param line    Line number at offset.
-     */(
-        /**
-         * @return Start offset in bytecode.
-         */
-        val startPc: Int,
-        /**
-         * @return Line number at offset.
-         */
-        val line: Int,
-    )
+    class LineEntry(val startPc: Int, val line: Int)
 }

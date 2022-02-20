@@ -33,17 +33,6 @@ class AttributeReader(
     private val expectedContentLength: Int
     private val nameIndex: Int
 
-    /**
-     * @param reader
-     * Parent class reader.
-     * @param builder
-     * Class being build/read into.
-     * @param is
-     * Parent stream.
-     *
-     * @throws IOException
-     * When the stream is unexpectedly closed or ends.
-     */
     init {
         // Extract name/lengtjh
         nameIndex = inputStream.readUnsignedShort()
@@ -136,7 +125,7 @@ class AttributeReader(
             STACK_MAP_TABLE -> return readStackMapTable()
             LINE_NUMBER_TABLE -> return readLineNumbers()
             LOCAL_VARIABLE_TABLE -> return readLocalVariables()
-            LOCAL_VARIABLE_TYPE_TABLE -> return readLocalVariableTypess()
+            LOCAL_VARIABLE_TYPE_TABLE -> return readLocalVariableTypes()
             PERMITTED_SUBCLASSES -> return readPermittedClasses()
             RECORD -> return readRecord()
             CHARACTER_RANGE_TABLE, COMPILATION_ID, METHOD_PARAMETERS, MODULE_HASHES, MODULE_MAIN_CLASS, MODULE_PACKAGES, MODULE_RESOLUTION, MODULE_TARGET, SOURCE_ID -> {}
@@ -205,7 +194,7 @@ class AttributeReader(
      * When the stream is unexpectedly closed or ends.
      */
     @Throws(IOException::class)
-    private fun readLocalVariableTypess(): LocalVariableTypeTableAttribute {
+    private fun readLocalVariableTypes(): LocalVariableTypeTableAttribute {
         val entries: MutableList<VarTypeEntry> = ArrayList()
         val count = stream.readUnsignedShort()
         for (i in 0 until count) {

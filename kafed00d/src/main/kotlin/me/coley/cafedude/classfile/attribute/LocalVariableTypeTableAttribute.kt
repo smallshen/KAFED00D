@@ -6,18 +6,16 @@ import java.util.*
 /**
  * Variable generic/type table attribute.
  *
- * @author Matt Coley
+ * @property nameIndex Name index in constant pool.
+ * @property entries   Variable type table entries.
  */
 class LocalVariableTypeTableAttribute
-/**
- * @param nameIndex Name index in constant pool.
- * @param entries   Variable type table entries.
- */(
+    (
     nameIndex: Int,
     /**
      * @param entries New ta+ble entries.
      */
-    var entries: List<VarTypeEntry>,
+    val entries: List<VarTypeEntry>,
 ) : Attribute(nameIndex) {
     /**
      * @return Table entries.
@@ -43,35 +41,19 @@ class LocalVariableTypeTableAttribute
 
     /**
      * Variable table entry.
+     *
+     * @property startPc        Bytecode offset var starts at.
+     * @property length         Bytecode length var spans across.
+     * @property nameIndex      CP UTF8 name index.
+     * @property signatureIndex CP UTF8 signature index.
+     * @property index          Variable index.
      */
-    class VarTypeEntry
-    /**
-     * @param startPc        Bytecode offset var starts at.
-     * @param length         Bytecode length var spans across.
-     * @param nameIndex      CP UTF8 name index.
-     * @param signatureIndex CP UTF8 signature index.
-     * @param index          Variable index.
-     */(
-        /**
-         * @return Bytecode offset var starts at.
-         */
+    data class VarTypeEntry(
         val startPc: Int,
-        /**
-         * @return Bytecode length var spans across.
-         */
         val length: Int,
-        /**
-         * @return CP UTF8 name index.
-         */
         val nameIndex: Int,
-        /**
-         * @return CP UTF8 signature index.
-         */
         val signatureIndex: Int,
-        /**
-         * @return Variable index.
-         */
-        val index: Int,
+        val index: Int
     ) : CpAccessor {
 
         override fun cpAccesses(): MutableSet<Int> {

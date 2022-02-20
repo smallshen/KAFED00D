@@ -5,18 +5,9 @@ import me.coley.cafedude.Constants
 /**
  * Double pool entry.
  *
- * @author Matt Coley
+ * @property value Constant value.
  */
-class CpDouble
-/**
- * @param value Constant value.
- */(
-    /**
-     * @param value New constant value.
-     */
-    var value: Double,
-) : ConstPoolEntry(Constants.ConstantPool.DOUBLE) {
+data class CpDouble(val value: Double) : ConstPoolEntry(Constants.ConstantPool.DOUBLE) {
 
-    override val isWide: Boolean
-        get() = true
+    override val isWide: Boolean = true
 }

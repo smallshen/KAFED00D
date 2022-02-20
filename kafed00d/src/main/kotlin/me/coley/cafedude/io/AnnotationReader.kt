@@ -27,26 +27,7 @@ class AnnotationReader(
     private val nameIndex: Int
     private val maxCpIndex: Int
 
-    /**
-     * Create an annotation reader.
-     *
-     * @param reader
-     * Parent class reader.
-     * @param cp
-     * The constant pool to use for reference.
-     * @param is
-     * Stream to read from.
-     * @param length
-     * Expected length of data to read.
-     * @param nameIndex
-     * Attribute name index.
-     * @param context
-     * Location of the annotation.
-     *
-     * @throws IOException
-     * When the subsection of the given stream for annotation reading cannot be allocated,
-     * possible due to out-of-bounds problems. This is an indicator of a malformed class.
-     */
+
     init {
         val data = ByteArray(length)
         inputStream.readFully(data)
@@ -176,9 +157,11 @@ class AnnotationReader(
         val typeIndex = inputStream.readUnsignedShort()
         // Validate the type points to an entry in the constant pool that is valid UTF8 item
         if (typeIndex >= maxCpIndex) {
-            logger.warn("Illegally formatted Annotation item, out of CP bounds, type_index={} >= {}",
+            logger.warn(
+                "Illegally formatted Annotation item, out of CP bounds, type_index={} >= {}",
                 typeIndex,
-                maxCpIndex)
+                maxCpIndex
+            )
             throw IllegalArgumentException("Annotation type_index out of CP bounds!")
         }
         if (!cp.isIndexOfType(typeIndex, CpUtf8::class.java)) {

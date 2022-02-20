@@ -10,95 +10,35 @@ import me.coley.cafedude.io.AttributeContext
 import java.util.*
 
 /**
- * Class file format.
- *
- * @author Matt Coley
+ * @property versionMinor     Class minor version.
+ * @property versionMajor     Class major version.
+ * @property pool             Pool entries.
+ * @property access           Class access flags.
+ * @property classIndex       Index in pool for the current class.
+ * @property superIndex       Index in pool for the super class.
+ * @property interfaceIndices Indices in pool for interfaces.
+ * @property fields           Fields.
+ * @property methods          Methods.
+ * @property attributes       Attributes.
+ * @property name             Class name
+ * @property superName        Super class name
  */
-class ClassFile
-/**
- * @param versionMinor     Class minor version.
- * @param versionMajor     Class major version.
- * @param pool             Pool entries.
- * @param access           Class access flags.
- * @param classIndex       Index in pool for the current class.
- * @param superIndex       Index in pool for the super class.
- * @param interfaceIndices Indices in pool for interfaces.
- * @param fields           Fields.
- * @param methods          Methods.
- * @param attributes       Attributes.
- */(
-    /**
-     * @param versionMinor Class minor version.
-     */
-    var versionMinor: Int,
-    /**
-     * @param versionMajor Class major version.
-     */
-    var versionMajor: Int,
-    /**
-     * @return Pool entries.
-     */
+class ClassFile(
+    val versionMinor: Int,
+    val versionMajor: Int,
     val pool: ConstPool,
-    /**
-     * @param access Class access flags.
-     */
-    var access: Int,
-    /**
-     * @param classIndex Index in pool for the current class.
-     */
-    var classIndex: Int,
-    /**
-     * @param superIndex Index in pool for the super class.
-     */
-    var superIndex: Int,
-    /**
-     * @param interfaceIndices New indices in pool for interfaces.
-     */
-    var interfaceIndices: List<Int>,
-    /**
-     * @param fields New list of fields.
-     */
-    var fields: List<Field>,
-    /**
-     * @param methods New list of methods.
-     */
-    var methods: List<Method>,
-    override var attributes: List<Attribute>,
+    val access: Int,
+    val classIndex: Int,
+    val superIndex: Int,
+    val interfaceIndices: List<Int>,
+    val fields: List<Field>,
+    val methods: List<Method>,
+    override val attributes: List<Attribute>,
 ) : AttributeHolder, CpAccessor {
-    /**
-     * @return Indices in pool for interfaces.
-     */
-    /**
-     * @return Fields.
-     */
-    /**
-     * @return Methods.
-     */
-    /**
-     * @return Class access flags.
-     */
-    /**
-     * @return Class minor version.
-     */
-    /**
-     * @return Class major version.
-     */
-    /**
-     * @return Index in pool for the current class.
-     */
-    /**
-     * @return Index in pool for the super class.
-     */
-
-    /**
-     * @return Class name.
-     */
     val name: String
         get() = getClassName(classIndex)
 
-    /**
-     * @return Parent class name.
-     */
+
     val superName: String
         get() = getClassName(superIndex)
 

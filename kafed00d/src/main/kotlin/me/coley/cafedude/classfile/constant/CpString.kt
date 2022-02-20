@@ -5,14 +5,6 @@ import me.coley.cafedude.Constants
 /**
  * String pool entry. Points to an UTF constant.
  *
- * @author Matt Coley
+ * @property index Index of UTF string in pool.
  */
-class CpString
-/**
- * @param index Index of UTF string in pool.
- */(
-    /**
-     * @param index New index of UTF string in pool.
-     */
-    var index: Int,
-) : ConstPoolEntry(Constants.ConstantPool.STRING)
+data class CpString(val index: Int) : ConstPoolEntry(Constants.ConstantPool.STRING)

@@ -6,22 +6,11 @@ import java.util.*
 /**
  * Variable table attribute.
  *
- * @author Matt Coley
+ * @property nameIndex Name index in constant pool.
+ * @property entries   Variable table entries.
  */
-class LocalVariableTableAttribute
-/**
- * @param nameIndex Name index in constant pool.
- * @param entries   Variable table entries.
- */(
-    nameIndex: Int,
-    /**
-     * @param entries New table entries.
-     */
-    var entries: List<VarEntry>,
-) : Attribute(nameIndex) {
-    /**
-     * @return Table entries.
-     */
+class LocalVariableTableAttribute(nameIndex: Int, val entries: List<VarEntry>) : Attribute(nameIndex) {
+
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()
@@ -43,34 +32,18 @@ class LocalVariableTableAttribute
 
     /**
      * Variable table entry.
+     *
+     * @property startPc   Bytecode offset var starts at.
+     * @property length    Bytecode length var spans across.
+     * @property nameIndex CP UTF8 name index.
+     * @property descIndex CP UTF8 desc index.
+     * @property index     Variable index.
      */
-    class VarEntry
-    /**
-     * @param startPc   Bytecode offset var starts at.
-     * @param length    Bytecode length var spans across.
-     * @param nameIndex CP UTF8 name index.
-     * @param descIndex CP UTF8 desc index.
-     * @param index     Variable index.
-     */(
-        /**
-         * @return Bytecode offset var starts at.
-         */
+    data class VarEntry(
         val startPc: Int,
-        /**
-         * @return Bytecode length var spans across.
-         */
         val length: Int,
-        /**
-         * @return CP UTF8 name index.
-         */
         val nameIndex: Int,
-        /**
-         * @return CP UTF8 desc index.
-         */
         val descIndex: Int,
-        /**
-         * @return Variable index.
-         */
         val index: Int,
     ) : CpAccessor {
 

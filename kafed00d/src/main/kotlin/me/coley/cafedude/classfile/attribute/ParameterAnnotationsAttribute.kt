@@ -9,23 +9,14 @@ import me.coley.cafedude.classfile.annotation.Annotation
  *  * `RuntimeVisibleParameterAnnotations`>
  *
  *
- * @author Matt Coley
+ * @property nameIndex            Name index in constant pool.
+ * @property parameterAnnotations Map of parameter indices to their list of attributes.
  */
-class ParameterAnnotationsAttribute
-/**
- * @param nameIndex            Name index in constant pool.
- * @param parameterAnnotations Map of parameter indices to their list of attributes.
- */(
+class ParameterAnnotationsAttribute(
     nameIndex: Int,
-    /**
-     * @param parameterAnnotations Map of parameter indices to their list of attributes.
-     */
-    var parameterAnnotations: Map<Int, List<Annotation>>,
+    val parameterAnnotations: Map<Int, List<Annotation>>,
 ) : Attribute(nameIndex) {
-    /**
-     * @return Map of parameter indices to their list of attributes.
-     */
-
+    
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()
         for (list in parameterAnnotations.values) for (annotation in list) set.addAll(annotation.cpAccesses())

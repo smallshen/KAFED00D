@@ -6,18 +6,8 @@ package me.coley.cafedude.classfile
  * @author Matt Coley
  */
 class Descriptor private constructor(
-    /**
-     * @return Descriptor kind.
-     */
-    //
     val kind: Kind,
-    /**
-     * @return String contents of this desc object.
-     */
     val descriptor: String,
-    /**
-     * @return Array level.
-     */
     val arrayLevel: Int = 0,
 ) {
 

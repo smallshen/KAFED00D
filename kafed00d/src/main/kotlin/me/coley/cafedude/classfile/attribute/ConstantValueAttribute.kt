@@ -3,22 +3,13 @@ package me.coley.cafedude.classfile.attribute
 /**
  * Constant value attribute
  *
- * @author JCWasmx86
+ * @property nameIndex          Name index in constant pool.
+ * @property constantValueIndex Index in the constant pool representing the value of this attribute.
  */
-class ConstantValueAttribute
-/**
- * @param nameIndex          Name index in constant pool.
- * @param constantValueIndex Index in the constant pool representing the value of this attribute.
- */(
+class ConstantValueAttribute(
     nameIndex: Int,
-    /**
-     * @property constantValueIndex Index in the constant pool representing the value of this attribute.
-     */
-    var constantValueIndex: Int,
+    val constantValueIndex: Int,
 ) : Attribute(nameIndex) {
-    /**
-     * @return Index in the constant pool representing the value of this attribute.
-     */
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()

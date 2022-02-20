@@ -57,7 +57,7 @@ class AttributeWriter
                     val bsms = attribute as BootstrapMethodsAttribute
                     out.writeShort(bsms.bootstrapMethods.size)
                     for (bsm in bsms.bootstrapMethods) {
-                        out.writeShort(bsm.bsmMethodref)
+                        out.writeShort(bsm.bsmMethodRef)
                         out.writeShort(bsm.args.size)
                         for (arg in bsm.args) {
                             out.writeShort(arg)
