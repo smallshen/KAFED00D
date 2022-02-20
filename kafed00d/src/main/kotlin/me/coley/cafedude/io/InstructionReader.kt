@@ -171,6 +171,6 @@ object InstructionReader {
     }
 }
 
-inline infix fun Byte.and(i: Int) = toInt() and i
-inline infix fun Short.and(i: Int) = toInt() and i
-inline infix fun Byte.or(i: Byte) = toInt() or i.toInt()
+private inline infix fun Byte.and(i: Int) = toInt() and i
+private inline infix fun Short.and(i: Int) = toInt() and i
+private inline infix fun Byte.or(i: Byte) = toInt() or i.toInt()
