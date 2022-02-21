@@ -223,7 +223,7 @@ class AttributeWriter
                     out.writeShort(signatureAttribute.signatureIndex)
                 }
                 Constants.Attributes.SOURCE_DEBUG_EXTENSION -> {
-                    val debugExtension = attribute as DebugExtensionAttribute
+                    val debugExtension = attribute as SourceDebugExtensionAttribute
                     out.write(debugExtension.debugExtension)
                 }
                 Constants.Attributes.SOURCE_FILE -> {

@@ -5,19 +5,16 @@ import me.coley.cafedude.classfile.annotation.Annotation
 /**
  * Annotation collection attribute. Represents either:
  *
- *  * `RuntimeInvisibleAnnotations`>
- *  * `RuntimeVisibleAnnotations`>
+ *  * `RuntimeInvisibleAnnotations`
+ *  * `RuntimeVisibleAnnotations`
  *
  *
- * @property nameIndex
- * Name index in constant pool.
- * @property annotations
- * List of annotations.
+ * @property nameIndex Name index in constant pool.
+ * @property annotations List of annotations.
  */
-class AnnotationsAttribute(nameIndex: Int, val annotations: List<Annotation>) : Attribute(nameIndex) {
-    /**
-     * @return List of annotations.
-     */
+class AnnotationsAttribute(nameIndex: Int, val visible: Boolean, val annotations: List<Annotation>) :
+    Attribute(nameIndex) {
+
 
     override fun cpAccesses(): MutableSet<Int> {
         val set = super.cpAccesses()

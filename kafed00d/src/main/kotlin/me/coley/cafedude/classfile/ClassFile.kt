@@ -61,8 +61,7 @@ class ClassFile(
     }
 
 
-    override val holderType: AttributeContext
-        get() = AttributeContext.CLASS
+    override val holderType: AttributeContext = AttributeContext.CLASS
 
     override fun cpAccesses(): MutableSet<Int> {
         val set: MutableSet<Int> = TreeSet()

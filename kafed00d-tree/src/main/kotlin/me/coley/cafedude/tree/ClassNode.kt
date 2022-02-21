@@ -6,8 +6,8 @@ class ClassNode {
     var versionMinor: Int = 0
     var versionMajor: Int = 0
     var access: Int = ACC_PUBLIC
-    lateinit var className: String
-    lateinit var superClass: String
+    lateinit var name: String
+    lateinit var superName: String
     var interfaces: MutableList<String> = mutableListOf()
 
     var deprecated = false
@@ -15,4 +15,6 @@ class ClassNode {
     var signature: String? = null
 
     var sourceFile: String? = null
+    var sourceDebug: String? = null
+
 }

@@ -8,7 +8,7 @@ import java.util.*
  *
  * @property nameIndex Name index in constant pool.
  */
-abstract class Attribute(val nameIndex: Int) : CpAccessor {
+sealed class Attribute(val nameIndex: Int) : CpAccessor {
 
     /**
      * @return Computed size for the internal length value of this attribute for serialization.

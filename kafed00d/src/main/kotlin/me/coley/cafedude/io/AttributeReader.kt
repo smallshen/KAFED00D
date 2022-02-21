@@ -97,50 +97,56 @@ class AttributeReader(
                 return null
             }
         }
-        when (name) {
-            CODE -> return readCode()
-            CONSTANT_VALUE -> return readConstantValue()
-            DEPRECATED -> return DeprecatedAttribute(nameIndex)
-            ENCLOSING_METHOD -> return readEnclosingMethod()
-            EXCEPTIONS -> return readExceptions()
-            INNER_CLASSES -> return readInnerClasses()
-            NEST_HOST -> return readNestHost()
-            NEST_MEMBERS -> return readNestMembers()
-            SOURCE_DEBUG_EXTENSION -> return readSourceDebugExtension()
-            RUNTIME_INVISIBLE_ANNOTATIONS, RUNTIME_VISIBLE_ANNOTATIONS -> return readAnnotations(
-                context
-            )
-            RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS, RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS -> return readParameterAnnotations(
-                context
-            )
-            RUNTIME_INVISIBLE_TYPE_ANNOTATIONS, RUNTIME_VISIBLE_TYPE_ANNOTATIONS -> return readTypeAnnotations(
-                context
-            )
-            ANNOTATION_DEFAULT -> return readAnnotationDefault(context)
-            SYNTHETIC -> return readSynthetic()
-            BOOTSTRAP_METHODS -> return readBoostrapMethods()
-            SIGNATURE -> return readSignature()
-            SOURCE_FILE -> return readSourceFile()
-            MODULE -> return readModule()
-            STACK_MAP_TABLE -> return readStackMapTable()
-            LINE_NUMBER_TABLE -> return readLineNumbers()
-            LOCAL_VARIABLE_TABLE -> return readLocalVariables()
-            LOCAL_VARIABLE_TYPE_TABLE -> return readLocalVariableTypes()
-            PERMITTED_SUBCLASSES -> return readPermittedClasses()
-            RECORD -> return readRecord()
-            CHARACTER_RANGE_TABLE, COMPILATION_ID, METHOD_PARAMETERS, MODULE_HASHES, MODULE_MAIN_CLASS, MODULE_PACKAGES, MODULE_RESOLUTION, MODULE_TARGET, SOURCE_ID -> {}
-            else -> {}
+        return when (name) {
+            CODE -> readCode()
+            CONSTANT_VALUE -> readConstantValue()
+            DEPRECATED -> DeprecatedAttribute(nameIndex)
+            ENCLOSING_METHOD -> readEnclosingMethod()
+            EXCEPTIONS -> readExceptions()
+            INNER_CLASSES -> readInnerClasses()
+            NEST_HOST -> readNestHost()
+            NEST_MEMBERS -> readNestMembers()
+            SOURCE_DEBUG_EXTENSION -> readSourceDebugExtension()
+
+            RUNTIME_VISIBLE_ANNOTATIONS -> readAnnotations(context, true)
+            RUNTIME_INVISIBLE_ANNOTATIONS -> readAnnotations(context, false)
+
+            RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS -> readParameterAnnotations(context, true)
+            RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS -> readParameterAnnotations(context, false)
+
+            RUNTIME_VISIBLE_TYPE_ANNOTATIONS -> readTypeAnnotations(context, true)
+            RUNTIME_INVISIBLE_TYPE_ANNOTATIONS -> readTypeAnnotations(context, false)
+
+            ANNOTATION_DEFAULT -> readAnnotationDefault(context)
+            SYNTHETIC -> readSynthetic()
+            BOOTSTRAP_METHODS -> readBoostrapMethods()
+            SIGNATURE -> readSignature()
+            SOURCE_FILE -> readSourceFile()
+            MODULE -> readModule()
+            STACK_MAP_TABLE -> readStackMapTable()
+            LINE_NUMBER_TABLE -> readLineNumbers()
+            LOCAL_VARIABLE_TABLE -> readLocalVariables()
+            LOCAL_VARIABLE_TYPE_TABLE -> readLocalVariableTypes()
+            PERMITTED_SUBCLASSES -> readPermittedClasses()
+            RECORD -> readRecord()
+//            Not used by jdk
+//            CHARACTER_RANGE_TABLE, COMPILATION_ID, METHOD_PARAMETERS,
+//            MODULE_HASHES, MODULE_MAIN_CLASS, MODULE_PACKAGES, MODULE_RESOLUTION,
+//            MODULE_TARGET, SOURCE_ID -> {}
+            else -> {
+                // No known/unhandled attribute length is less than 2.
+                // So if that is given, we likely have an intentionally malformed attribute.
+                if (expectedContentLength < 2) {
+                    logger.debug("Invalid attribute, its content length <= 1")
+                    stream.skipBytes(expectedContentLength)
+                    return null
+                }
+                // Default handling, skip remaining bytes
+                stream.skipBytes(expectedContentLength)
+                return DefaultAttribute(nameIndex, stream.buffer)
+            }
         }
-        // No known/unhandled attribute length is less than 2.
-        // So if that is given, we likely have an intentionally malformed attribute.
-        if (expectedContentLength < 2) {
-            logger.debug("Invalid attribute, its content length <= 1")
-            stream.skipBytes(expectedContentLength)
-            return null
-        }
-        // Default handling, skip remaining bytes
-        stream.skipBytes(expectedContentLength)
-        return DefaultAttribute(nameIndex, stream.buffer)
+
     }
 
     /**
@@ -430,7 +436,7 @@ class AttributeReader(
      * When the stream is unexpectedly closed or ends.
      */
     @Throws(IOException::class)
-    private fun readSourceDebugExtension(): DebugExtensionAttribute? {
+    private fun readSourceDebugExtension(): SourceDebugExtensionAttribute? {
         val debugExtension = ByteArray(expectedContentLength)
         stream.readFully(debugExtension)
         // Validate data represents UTF text
@@ -440,7 +446,7 @@ class AttributeReader(
             logger.debug("Invalid SourceDebugExtension, not a valid UTF")
             return null
         }
-        return DebugExtensionAttribute(nameIndex, debugExtension)
+        return SourceDebugExtensionAttribute(nameIndex, debugExtension)
     }
 
     /**
@@ -453,8 +459,8 @@ class AttributeReader(
      * When the stream is unexpectedly closed or ends.
      */
     @Throws(IOException::class)
-    private fun readAnnotations(context: AttributeContext): AnnotationsAttribute? {
-        return AnnotationReader(reader, builder.pool, stream, expectedContentLength, nameIndex, context)
+    private fun readAnnotations(context: AttributeContext, visible: Boolean): AnnotationsAttribute? {
+        return AnnotationReader(reader, builder.pool, visible, stream, expectedContentLength, nameIndex, context)
             .readAnnotations()
     }
 
@@ -468,8 +474,8 @@ class AttributeReader(
      * When the stream is unexpectedly closed or ends.
      */
     @Throws(IOException::class)
-    private fun readParameterAnnotations(context: AttributeContext): ParameterAnnotationsAttribute? {
-        return AnnotationReader(reader, builder.pool, stream, expectedContentLength, nameIndex, context)
+    private fun readParameterAnnotations(context: AttributeContext, visible: Boolean): ParameterAnnotationsAttribute? {
+        return AnnotationReader(reader, builder.pool, visible, stream, expectedContentLength, nameIndex, context)
             .readParameterAnnotations()
     }
 
@@ -483,8 +489,8 @@ class AttributeReader(
      * When the stream is unexpectedly closed or ends.
      */
     @Throws(IOException::class)
-    private fun readTypeAnnotations(context: AttributeContext): AnnotationsAttribute? {
-        return AnnotationReader(reader, builder.pool, stream, expectedContentLength, nameIndex, context)
+    private fun readTypeAnnotations(context: AttributeContext, visible: Boolean): AnnotationsAttribute? {
+        return AnnotationReader(reader, builder.pool, visible, stream, expectedContentLength, nameIndex, context)
             .readTypeAnnotations()
     }
 
@@ -499,7 +505,7 @@ class AttributeReader(
      */
     @Throws(IOException::class)
     private fun readAnnotationDefault(context: AttributeContext): AnnotationDefaultAttribute? {
-        return AnnotationReader(reader, builder.pool, stream, expectedContentLength, nameIndex, context)
+        return AnnotationReader(reader, builder.pool, true, stream, expectedContentLength, nameIndex, context)
             .readAnnotationDefault()
     }
 

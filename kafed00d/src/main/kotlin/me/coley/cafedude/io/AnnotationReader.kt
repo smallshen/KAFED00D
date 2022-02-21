@@ -21,6 +21,7 @@ import java.io.IOException
 class AnnotationReader(
     private val reader: ClassFileReader,
     private val cp: ConstPool,
+    val visible: Boolean,
     inputStream: DataInputStream,
     length: Int,
     nameIndex: Int,
@@ -90,7 +91,7 @@ class AnnotationReader(
                 }
             }
             // Didn't throw exception, its valid
-            AnnotationsAttribute(nameIndex, annotations)
+            AnnotationsAttribute(nameIndex, visible, annotations)
         } catch (t: Throwable) {
             logger.debug("Illegally formatted Annotations", t)
             null
@@ -119,7 +120,7 @@ class AnnotationReader(
                 parameterAnnotations[p] = annotations
             }
             // Didn't crash, its valid
-            ParameterAnnotationsAttribute(nameIndex, parameterAnnotations)
+            ParameterAnnotationsAttribute(nameIndex, visible, parameterAnnotations)
         } catch (t: Throwable) {
             logger.debug("Illegally formatted ParameterAnnotations", t)
             null
@@ -143,7 +144,7 @@ class AnnotationReader(
             val annotations: MutableList<Annotation> = ArrayList()
             for (i in 0 until numAnnotations) annotations.add(readTypeAnnotation())
             // Didn't throw exception, its valid
-            AnnotationsAttribute(nameIndex, annotations)
+            AnnotationsAttribute(nameIndex, visible, annotations)
         } catch (t: Throwable) {
             logger.debug("Illegally formatted TypeAnnotations", t)
             null

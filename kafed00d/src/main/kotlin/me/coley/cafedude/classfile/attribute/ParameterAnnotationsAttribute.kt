@@ -14,6 +14,7 @@ import me.coley.cafedude.classfile.annotation.Annotation
  */
 class ParameterAnnotationsAttribute(
     nameIndex: Int,
+    val visible: Boolean,
     val parameterAnnotations: Map<Int, List<Annotation>>,
 ) : Attribute(nameIndex) {
     

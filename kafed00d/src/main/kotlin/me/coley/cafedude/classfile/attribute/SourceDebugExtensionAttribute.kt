@@ -6,7 +6,7 @@ package me.coley.cafedude.classfile.attribute
  * @property nameIndex      Name index in constant pool.
  * @property debugExtension Extension data stored in attribute.
  */
-class DebugExtensionAttribute(nameIndex: Int, val debugExtension: ByteArray) : Attribute(nameIndex) {
+class SourceDebugExtensionAttribute(nameIndex: Int, val debugExtension: ByteArray) : Attribute(nameIndex) {
 
     override fun computeInternalLength(): Int {
         return debugExtension.size
