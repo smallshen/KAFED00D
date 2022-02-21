@@ -171,7 +171,7 @@ class AttributeReader(
     }
 
     /**
-     * @return Permitted classes authorized to extend/implement the current class.
+     * @return Permitted classes authorized extending/implement the current class.
      *
      * @throws IOException
      * When the stream is unexpectedly closed or ends.

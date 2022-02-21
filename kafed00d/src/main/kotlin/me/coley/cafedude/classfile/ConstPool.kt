@@ -3,7 +3,6 @@ package me.coley.cafedude.classfile
 import me.coley.cafedude.classfile.constant.ConstPoolEntry
 import me.coley.cafedude.classfile.constant.CpUtf8
 import java.util.*
-import java.util.function.Consumer
 
 /**
  * Constant pool wrapper.
@@ -29,7 +28,7 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
     }
 
     /**
-     * Insert an entry befoire the given index in the pool.
+     * Insert an entry before the given index in the pool.
      *
      * @param index CP index.
      * @param entry Inserted pool entry value.
@@ -46,7 +45,7 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
     fun getUtf(index: Int): String {
         val entry = get(index)
         if (entry is CpUtf8) return entry.text
-        throw IllegalArgumentException("Index $index not UTF8")
+        error("Index $index not UTF8")
     }
 
     /**
@@ -94,7 +93,7 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
      */
     private fun cpToInternal(index: Int): Int {
         // Edge case
-        if (index == 0) return index
+        if (index == 0) return 0
         // Convert index back to 0-index
         var internal = index - 1
         // Just subtract until a match. Will be at worst O(N) where N is the # of wide entries.
@@ -117,15 +116,15 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
      * @param constPoolEntry Entry added.
      * @param location       Location added.
      */
-    private fun onAdd(constPoolEntry: ConstPoolEntry?, location: Int) {
-        val entrySize = if (constPoolEntry!!.isWide) 2 else 1
+    private fun onAdd(constPoolEntry: ConstPoolEntry, location: Int) {
+        val entrySize = if (constPoolEntry.isWide) 2 else 1
         // Need to push things over since something is being inserted.
         // Shift everything >= location by +entrySize
         val larger = wideIndices.tailSet(location)
         if (!larger.isEmpty()) {
             val tmp: List<Int> = ArrayList(larger)
             larger.clear()
-            tmp.forEach(Consumer { i: Int -> wideIndices.add(i + entrySize) })
+            tmp.forEach { wideIndices.add(it + entrySize) }
         }
         // Add wide
         if (constPoolEntry.isWide) wideIndices.add(location)
@@ -147,7 +146,7 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
         if (!larger.isEmpty()) {
             val tmp: List<Int> = ArrayList(larger)
             larger.clear()
-            tmp.forEach(Consumer { i: Int -> wideIndices.add(i - entrySize) })
+            tmp.forEach { wideIndices.add(it - entrySize) }
         }
     }
 
@@ -179,9 +178,9 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
         return ret
     }
 
-    override fun remove(o: ConstPoolEntry): Boolean {
-        onRemove(o, indexOf(o))
-        return backing.remove(o)
+    override fun remove(element: ConstPoolEntry): Boolean {
+        onRemove(element, indexOf(element))
+        return backing.remove(element)
     }
 
     override fun containsAll(elements: Collection<ConstPoolEntry>): Boolean {

@@ -19,8 +19,12 @@ import java.io.IOException
  * @author Matt Coley
  */
 class AnnotationReader(
-    private val reader: ClassFileReader, private val cp: ConstPool, inputStream: DataInputStream, length: Int,
-    nameIndex: Int, context: AttributeContext,
+    private val reader: ClassFileReader,
+    private val cp: ConstPool,
+    inputStream: DataInputStream,
+    length: Int,
+    nameIndex: Int,
+    context: AttributeContext,
 ) {
     private val inputStream: DataInputStream
     private val context: AttributeContext
