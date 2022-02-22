@@ -150,6 +150,12 @@ class ConstPool(private val backing: MutableList<ConstPoolEntry> = ArrayList()) 
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    @JvmName("getSmartCast")
+    operator fun <T: ConstPoolEntry> invoke(i: Int): T {
+        return get(i) as T
+    }
+
     override fun isEmpty(): Boolean {
         return backing.isEmpty()
     }

@@ -7,7 +7,7 @@ import me.coley.cafedude.Constants
  *
  * @property tag Constant's tag.
  */
-abstract class ConstPoolEntry(val tag: Int) : Constants.ConstantPool {
+sealed class ConstPoolEntry(val tag: Int) : Constants.ConstantPool {
 
     /**
      * @return `true` if constant uses two pool entries.

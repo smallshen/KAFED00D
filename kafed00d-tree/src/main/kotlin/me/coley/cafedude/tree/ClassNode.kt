@@ -15,6 +15,6 @@ class ClassNode {
     var signature: String? = null
 
     var sourceFile: String? = null
-    var sourceDebug: String? = null
+    var sourceDebug: ByteArray? = null
 
 }

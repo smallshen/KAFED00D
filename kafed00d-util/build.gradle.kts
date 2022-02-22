@@ -10,7 +10,6 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":kafed00d"))
-    implementation(project(":kafed00d-util"))
 }
 
 tasks {
