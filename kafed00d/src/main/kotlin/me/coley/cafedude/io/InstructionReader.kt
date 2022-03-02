@@ -126,10 +126,9 @@ object InstructionReader {
 
                     TABLESWITCH -> {
                         val pos = buffer.position()
-                        // Skip padding.
-                        // the tableswitch and lookupswitch 32-bit offsets will be 4-byte aligned.
-                        buffer.position(pos + 3)
-                        val dflt = buffer.int
+                        buffer.position(pos + (4 - pos and 3))
+
+                        val default = buffer.int
                         val low = buffer.int
                         val high = buffer.int
                         val count = high - low + 1
@@ -139,14 +138,13 @@ object InstructionReader {
                             offsets.add(buffer.int)
                             i++
                         }
-                        TableSwitchInstruction(dflt, low, high, offsets)
+                        TableSwitchInstruction(default, low, high, offsets)
                     }
                     LOOKUPSWITCH -> {
                         val pos = buffer.position()
-                        // Skip padding.
-                        // the tableswitch and lookupswitch 32-bit offsets will be 4-byte aligned.
-                        buffer.position(pos + 3)
-                        val dflt = buffer.int
+                        buffer.position(pos + (4 - pos and 3))
+
+                        val default = buffer.int
                         val keyCount = buffer.int
                         val keys: MutableList<Int> = ArrayList(keyCount)
                         val offsets: MutableList<Int> = ArrayList(keyCount)
@@ -156,13 +154,14 @@ object InstructionReader {
                             offsets.add(buffer.int)
                             i++
                         }
-                        LookupSwitchInstruction(dflt, keys, offsets)
+                        LookupSwitchInstruction(default, keys, offsets)
                     }
                     else -> throw IllegalStateException("Unknown instruction: $opcode")
                 }
 
             )
         }
+        require(buffer.remaining() == 0) { "Buffer isn't fully read" }
         return instructions
     }
 }
